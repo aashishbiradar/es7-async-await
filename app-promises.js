@@ -39,6 +39,22 @@ const getGrades = (schoolId) => {
     })
 };
 
+const getStatus = (id) => {
+    let user;
+    return getUser(id).then((tempUser) => {
+        user = tempUser;
+        return getGrades(user.schoolId);
+    }).then((grades)=>{
+        let average = 0;
+
+        if(grades.length > 0) {
+            average = grades.map((grade) => grade.grade).reduce((a,b) => a+b) / grades.length;
+        }
+
+        return `${user.name} has a ${average}% in class`;
+    });
+};
+
 getUser(2).then((user) => {
     console.log(user);
 }).catch((e) => {
@@ -47,6 +63,12 @@ getUser(2).then((user) => {
 
 getGrades(111).then((grades) => {
     console.log(grades);
+}).catch((e) => {
+    console.log(e);
+});
+
+getStatus(1).then((status) => {
+    console.log(status);
 }).catch((e) => {
     console.log(e);
 });
